@@ -1,0 +1,332 @@
+body {
+	margin: 0;
+	font-family: "微软雅黑", "microsoft yahei";
+	letter-spacing: 1px;
+}
+button {
+	font-size: 21px !important;
+	letter-spacing: 3px;
+	height: 55px;
+}
+.button-width {
+	margin-left: 5%;
+	width: 90%;
+}
+.confirm-width {
+	width: 100%
+}
+li {
+	list-style: none;
+}
+li ul li {
+	margin-left: 12px;
+}
+.squre {
+	width: 18px;
+	height: 14px;
+	background-color: #3eb4fc;
+	margin-top: 7px;
+	margin-left: 4px;
+	margin-right: 12px;
+
+	display: block;
+	float: left;
+}
+.circle {
+	width: 16px;
+	height: 16px;
+	border: #ffbe57 solid 3px;
+	margin-top: 5px;
+	margin-left: 4px;
+	margin-right: 15px;
+	border-radius: 8px;
+
+	display: block;
+	float: left;
+}
+
+/*垂直间隔*/
+.white-box {
+	height: 70px;
+}
+.top-offset {
+	margin-top: 20px;
+}
+
+
+.font-size-16 {
+	font-size: 16px;
+}
+.font-size-18 {
+	font-size: 18px;
+}
+.text-red {
+	color: #f75464;
+}
+.text-oringe {
+	color: #ffbe57;
+}
+.text-green {
+	color: #36d387;
+}
+.text-blue {
+	color: #3eb4fc;
+}
+.text-black {
+	color: #333333;
+}
+.pages-click {
+	color: white;
+	background-color: #3EB4FC;
+}
+
+/*lookup.js*/
+.up-box {
+	width: 100%;
+	height: 250px;
+}
+.info-box {
+	position: absolute;
+	
+	width: 100%;
+	height: 250px;
+}
+
+/*头像*/
+.img-size {
+	width: 72px;
+	height: 72px;
+}
+.img-position {
+	margin-top: 40px;
+	margin-left: 10%;
+	width: 20%;
+	height: auto;
+	
+	text-align: center;
+	float: left;
+}
+#img_name {
+	margin-top: 25px;
+	text-align: center;
+	font-weight: 200;
+	font-size: 20px;
+	color: white;
+}
+
+/*右上的大框显示分数*/
+.score-position {
+	margin: 43px 0 0 57%;
+	width: 36%;
+}
+.score-box-half {
+	width: 50%;
+	text-align: center;
+	float: left;
+}
+.score-ruler {
+	margin-top: 16px;
+	margin-left: 10%;
+	width: 90%;
+	height: 34px;
+	line-height: 32px;
+	
+	border-radius: 17px;
+	background-color: #0e2b3d;
+	float: left;
+}
+.font-gray-big {
+	margin-bottom: 0;
+	font-size: 32px;
+	font-weight: lighter;
+	
+	color: #eeeeee;
+}
+.font-gray-small {
+	font-size: 14px;
+	color: #aaaaaa;
+}
+.score-ico {
+	margin-left: 18px;
+	width: 24px;
+	height: 15px;
+	
+	float: left;
+}
+.score-ico-all {
+	width: 3px;
+	margin-left: 1px;
+	background-color: white;
+	
+	float: left;
+	display: block;
+}
+.score-ico-1 {
+	margin-top: 16px;
+	height: 6px;
+}
+.score-ico-2 {
+	margin-top: 10px;
+	height: 12px;
+}
+.score-ico-3 {
+	margin-top: 13px;
+	height: 9px;
+}
+
+/*进度条*/
+.bg-progress {
+	width: 100%;
+	height: 250px;
+	
+	background-color: #11354b;
+	position: absolute;
+}
+#bg_progress_loading {
+	height: 250px;
+	width: 0%;
+	background-color: #154460;
+}
+.bar-progress {
+	margin: 185px 10% 12px 10%;
+	width: 80%;
+	height: 5px;
+
+	background-color: #425f72;
+	border-radius: 2.5px;
+}
+#bar_progress_loading {
+	width: 0%;
+	height: 5px;
+
+	background-color: #d0dff2;
+	border-radius: 2.5px;
+}
+
+.score-message {
+	margin-left: 11%;
+	float: left;
+}
+.score-percentage {
+	margin-right: 11%;
+	letter-spacing: normal;
+	float: right;
+}
+
+/*分页*/
+.pages-box {
+	width: 100%;
+	height: auto;
+	
+	overflow: hidden;
+}
+.pages {
+	margin: 0 12.5% 0 12.5%;
+	padding: 0;
+	width: 75%;
+	height: 56px;
+}
+.pages li {
+	margin: 0;
+	width: 33.333333%;
+	height: 56px;
+	
+	line-height: 56px;
+	font-size: 16px;
+	font-weight: 300;
+	text-align: center;
+	float: left;
+}
+.pages-info {
+	width: 100%;
+	height: 37px;
+	line-height: 37px;
+	
+	background-color: #e8e8e8;
+}
+.pages-info-left {
+	color: #7c7c7c;
+	margin-left: 17%;
+}
+.pages-info-right {
+	margin-left: 47%
+}
+.pages-play {
+	width: 300%;
+	min-height: 230px;
+	/*margin-left: -100%;*/
+	
+	padding-bottom: 30px;	
+	background-color: #e8e8e8;
+}
+.pages-play-piece {
+	padding-top: 14px;
+	width: 33.333333%;
+	min-height: 200px;
+	background-color: #ffffff;
+	
+	float: left;
+	overflow: auto;
+}
+.pages-patterns {
+	width: 17%;
+	height: 100%;
+
+	float: left;
+}
+.pages-circle {
+	margin: 12px 9px 30px auto;
+	
+	width: 18px;
+	height: 18px;
+	background-color: white;
+	border: #36d387 solid 3px;
+	border-radius: 9px;
+
+	display: block;
+	position: relative;
+}
+.pages-line {
+	margin: 21px 0 auto auto;
+	width: 2px;
+	height: 90px;
+	background-color: #dddddd;
+	
+	float: right;
+	position: relative;
+	right: 17px;
+}
+.pages-tickets {
+	width: 83%;
+	height: 100%;
+	
+	float: left;
+}
+.pages-tickets-one {
+	margin-top: 11px;
+}
+.score-value {
+	margin-right: 15%;
+	width: 50px;
+	font-size: 22px;
+	color: #555555;
+	
+	font-weight: 100;
+	letter-spacing: normal;
+	float: right;
+}
+.score-item {
+	margin-bottom: 0;
+	width: 65%;
+	color: #555555;
+}
+.score-date {
+	margin-left: -6%;
+	width: 60%;
+	font-size: 12px;
+	font-weight: 100;
+	letter-spacing: normal;
+	
+	transform: scale(0.8);
+	color: #555555;
+}

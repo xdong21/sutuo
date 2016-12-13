@@ -1,0 +1,450 @@
+# 素拓系统 面向管理后台的API
+# 华工电信团委学生会 
+# 2016.07.16修改
+
+# **** API 规范说明 ****
+# GET 方式的参数位于 query
+# POST 方式的参数位于 request body, 若无特殊说明，使用json格式
+# 若无特殊说明，返回格式为json
+
+
+# ************************ 年级相关 ***************************
+# @baseurl：/thinkphp/index.php/Home/Grade 
+
+# 创建年级
+# @path: POST /thinkphp/index.php/Home/Grade/create
+# 	@params: 
+# 		!year: number # 入学年份
+# 	@response:
+# 		status: bool # 操作是否成功
+# 		msg: string # 错误信息
+
+# 读取年级
+@path: GET /thinkphp/index.php/Home/Grade/readOne
+	@params:
+		!year: number # 入学年份
+	@response:
+		year: number
+		class: [number] # 该年级所含班级的班级编号数组
+
+# 删除年级
+# @path: GET /thinkphp/index.php/Home/Grade/delete
+# 	@params:
+# 		!year: number # 删除的入学年份
+# 	@response:
+# 		status: bool  # 是否成功（0失败，1成功）
+# 		msg: string   # 错误信息
+
+
+# ************************ 班级相关 ***************************
+# @baseurl： /thinkphp/index.php/Home/Class
+
+# 创建班级
+# @path: POST /thinkphp/index.php/Home/Class/create
+# 	@params:
+# 		!year: number # 入学年份
+# 		!className: string # 班级名称
+# 	@response:
+# 		classId: string # 系统生成的班级编号
+
+# 读取班级
+@path: GET /thinkphp/index.php/Home/Class/read
+	@params:
+		!classId: string # 班级编号
+	@response:
+		classId: string
+		className: string # 班级名称
+		studentCount: number # 学生数量
+		students: 
+			[
+				{
+					studentId: string # 学号
+					seatId: number # 座号
+				}
+			]
+
+# 修改班级信息
+@path: POST /thinkphp/index.php/Home/Class/update
+	@params:
+	    [
+	     {
+	      year: number     #年级
+	      yearMethod: number  #判断年级是否增删(0删除，1新增，2不变)
+	      classes: [
+	     	{
+	     	 classMethod: number  #判断班级是否增删(0删除，1新增，2不变)
+             className: string    
+             classId: string
+             studentCount: number
+            }
+         }   
+	    ]
+	@response:
+		status: bool
+
+# 删除的班级编号
+# @path: POST /thinkphp/index.php/Home/Class/delete
+# 	@params:
+# 		!classId: string # 删除的班级编号
+# 	@response:
+# 		status: bool	 # 是否成功（0失败，1成功）
+# 		msg: string 	 # 错误信息
+
+# ************************ 学生相关 ***************************
+# @baseurl: /thinkphp/index.php/Home/Student
+
+# ******* 创建学生相关 ********
+# 单独创建学生
+@path: POST thinkphp/index.php/Home/Student/createOne
+	@params:
+		!studentId: string 		# 学号
+		!studentName: string 	# 姓名
+		!classId: string 		# 所在班级编号
+		!seatId: number 	    # 座号（修改）
+	@response:
+		status: bool 	# 是否成功
+		msg: string 	# 错误信息
+
+# 批量创建学生
+@path: POST thinkphp/index.php/Home/Student/createMulti
+	@params:
+		![
+			{
+				!studentId: string 	 # 学号
+				!studentName: string # 姓名
+				!classId: string 	 # 所在班级编号
+				!seatId: number      # 座号（修改）
+			}
+		]
+	@response:
+		status: bool 	# 是否全部成功
+		errs: 			# 错误数组
+			[
+				{
+					studentId: string 	# 出错学号
+					msg: string 		# 错误信息
+				}
+			]
+
+# 从excel表格读取学生数据
+# 注意，只是从excel读取数据，返回供在前端显示，确认无误或修改后，需要调用上一个API实现创建学生操作
+@path: POST thinkphp/index.php/Home/Student/createImport
+	@params:
+		!file: file 		 # excel文件(修改)
+		!classId: string 	 # 所在班级编号(修改)
+	@response: #读取到数据 ，格式和批量创建学生的参数格式一致
+		[
+			status: bool 			 # 是否成功(修改)
+		    msg: string 			 # 错误信息(修改)
+			{
+				!studentId: string 	 # 学号
+				!studentName: string # 姓名
+				!classId: string 	 # 所在班级编号
+				!seatId: number      # 座号（修改）
+			}
+		]
+
+
+# ******* 读取学生信息相关 ********
+# 单独读取学生信息
+@path: GET thinkphp/index.php/Home/Student/readOne
+	@params:
+		!studentId: string # 学号
+		!detail: <0|1> # 是否返回详细加分项（sutuoItems域）， 0 否，1是
+	@response:
+		studentId: string 
+		seatId: number          # 座号（修改）
+		studentName: string   
+		classId: string
+		className: string    
+		sutuoScore:
+			{
+			general: number 	# 普通素拓分
+			humanity: number 	# 人文素质教育学分(修改)
+            creative: number    # 创新能力培养学分(修改)
+            }
+		sutuoItems <when detail=1>: [sutuoItem] # 素拓项数组，sutuoItem的定义见下
+
+# 批量读取学生基本信息 
+@path: GET thinkphp/index.php/Home/Student/readMulti
+	@params:
+		!classId: string #班级编号
+		!detail: <0|1> # 是否返回详细加分项（sutuoItems域）， 0 否，1是
+	@response:
+		[
+			{
+				studentId: string 
+				seatId: number          # 座号（修改）
+				StudentName: string  	# 学生姓名
+				classId: string
+				className: string 		# (修改)
+				sutuoScore:
+				{
+				 general: number 	# 普通素拓分
+				 humanity: number 	# 人文素质教育学分(修改)
+            	 creative: number   # 创新能力培养学分(修改)
+            }
+				sutuoItems <when detail=1>: [sutuoItem] # 素拓项数组，sutuoItem的定义见下
+			}
+		]
+# sutuoItem的定义
+	@type: sutuoItem
+	addingTime: string 	 # 加分时间(修改)
+	activityName: string # 活动名称(修改)
+	score: number  	     # 某个活动的分数(修改)
+	#sutuoCode: string   # 素拓类型代码（修改）
+	# sutuoCode说明
+						 # 普通分 1
+						 # 人文素质教育学分 2
+						 # 创新能力培养学分 3
+    sutuoName: string    # 素拓项名称（修改），即普通分，人文素质教育学分和创新能力培养学分
+    sutuoType: string    # 活动类型(修改)
+	from: string 		 # 加分操作来源
+
+# ******* 修改学生基本信息相关 ********
+# 单独修改学生基本信息
+# 注意：如果classId不修改的话传过来原classId(修改)
+@path: POST thinkphp/index.php/Home/Student/updateOne
+	@params:
+		!studentId: string 	# 学号
+		studentName: string # 学生姓名
+		classId: string 	# 班级编号
+		seatId: number      # 座号（修改）
+	@response:
+		status: bool 	#是否成功
+		msg: string 	#错误信息
+
+
+# ******* 操作素拓分相关 ********
+# 单独添加素拓分
+@path: POST thinkphp/index.php/Home/Student/addSutuoOne
+	@params:
+		!studentId: string 	# 学号
+		studentName: number # 学生姓名
+		!sutuoCode: string 	# 素拓分代码
+	@response:
+		status: bool 	# 是否成功
+		msg: string 	# 错误信息
+
+
+# 批量添加素拓分
+@path: POST thinkphp/index.php/Home/Student/addSutuoMulti
+	@params:
+		[
+			{
+				!studentId: string 	# 学号
+				studentName: number # 学生姓名
+				!sutuoCode: string 	# 素拓分代码
+			}
+		]
+	@response:
+		status: bool 	# 是否全部成功
+		errs:
+			[
+				{
+					studentId: string 	# 出错的学号
+					msg: string 		# 错误信息
+				}
+			]
+
+
+# 从excel表格批量读入素拓分
+# 注意，只是读入
+@path: POST thinkphp/index.php/Home/Student/addSutuoImport
+	@params <不使用json格式>:
+		file: file 	# 要解析的文件路径
+	@response: 		# 识别出的加分项
+		[
+			{
+				!studentId: string 	# 学号
+				studentName: number # 学生姓名
+				!sutuoCode: string 	# 素拓分代码
+			}
+		]
+
+
+# 单独删除素拓分
+@path: POST thinkphp/index.php/Home/Student/deleteSutuoOne
+	@params:
+		!studentId: string 	# 学号
+		studentName: number # 学生姓名
+		!sutuoCode: number 	# 素拓分代码
+	@response:
+		status:bool 	# 是否成功
+		msg: string 	# 错误信息
+
+
+
+# ***********************  活动相关   ************************
+# @baseurl: /thinkphp/index.php/Home/Activity
+
+# 创建活动 
+@path: POST /thinkphp/index.php/Home/Activity/insertActivity
+	@params:
+		!name: string 			# 活动名称
+		!holder: [string] 		# 举办部门数组 （全称）
+		!sutuoType: [string]	# 素拓类型 （全称）
+		!holdTime: string 		# 如 "2016/2/28"
+		 sutuo:
+				{
+					itemId: number 	# 活动内部的素拓项编号，修改或删除素拓项时有用
+					sutuoName: string 	# 素拓名，如 “普通分”，“人文素质教育学分”，“创新能力培养学分”
+					sutuoCode: string 	# 素拓类型代码
+						# sutuoCode说明
+						# 普通分 		   0
+						# 人文素质教育学分 1
+						# 创新能力培养学分 2
+					score: number 	# 分值
+				}
+	@response:
+		status: bool 		# 是否成功执行
+		activityId: number 	# 活动编号（成功时）
+		msg: string 		# 错误信息（错误时）
+
+
+#删除活动
+@path: GET /thinkphp/index.php/Home/Activity/deleteActivity
+	@params:
+		!activityId: number # 活动编号
+	@response:
+		status: bool 		# 是否成功执行
+		msg: string 		# 错误信息（错误时）
+
+# 查看所有活动概况 
+@path: GET /thinkphp/index.php/Home/Activity/getAllActivity
+	@params: none
+	@response:
+		[
+			{
+				activityId: number  # 活动编号 (查看活动详细信息、更改活动信息、更改素拓项时可以用）
+				name: string 		# 活动名称
+				holder: [string] 	# 举办部门数组
+				sutuoType: [string] # 素拓类型数组
+				holdTime: string 	# 举办时间  格式为 “ 2015/9/20”
+				status: string 		# 活动状态 <正在筹办 0 / 待素拓 1 / 已结束素拓 2>
+								    # 创建活动后，默认状态为正在筹办
+			}
+		]
+
+# 查看活动详细信息 
+@path: GET /thinkphp/index.php/Home/Activity/getActivity
+	@params: 
+		activityId: number
+	@response:
+		activityId: number  # 活动编号
+		name: string 		# 活动名称
+		holder: [string] 	# 举办部门数组
+		status: string 		# 活动状态
+		holdTime: string 	# 举办时间  格式为 “ 2015/9/20”
+		status: string 		# 活动状态 <正在筹办 / 待素拓 / 已结束素拓>
+		sutuo:  			# 素拓对象数组
+			[
+				{
+					itemId: number 	# 活动内部的素拓项编号，修改或删除素拓项时有用
+					sutuoName: string 	# 素拓名，如 “普通分”，“人文素质教育学分”，“创新能力培养学分”
+					sutuoCode: string 	# 素拓类型代码
+					score: number 	# 分值
+				}
+			]
+
+# 修改活动信息 
+@path: POST /thinkphp/index.php/Home/Activity/updateActivity
+	@params:
+		!activityId: number # 活动编号
+		name: string 		# 活动名称
+		holder: [string] 	# 举办部门数组
+		status: string 		# 活动状态
+		holdTime: string 	# 如 "2016/2/28"
+		sutuo:
+			[
+				{
+					!method: string 		# 操作名 <add / update /delete>
+					add: 			
+						sutuoName: string 		# 素拓名，如 “观众分”等五项分数
+						sutuoCode: string 	# 素拓类型代码
+						score: number 		# 分值
+					update: 		
+						itemId: number 		# 活动内部的素拓项编号，修改或删除素拓项时有用
+						sutuoName: string 		# 素拓名，如 “观众分”等五项分数
+						sutuoCode: string 	# 素拓类型代码
+						score: number 		# 分值
+					delete: 		
+						itemId: number 		# 活动内部的素拓项编号
+				}
+			]
+	@response:
+		status: bool 		# 是否成功执行
+		msg: string 		# 错误信息
+
+
+# Excel素拓单活动导入
+@path: POST /thinphp/index.php/Home/Student/importExcelOne
+	@params:
+		!activityId: number 	# 活动编号
+		!classId: string        # 班级id
+		!file: file 			# excel文件，后缀为xls,或者xlsx
+		#注意此处文件的name属性为file，而非文件名为file
+	@response:
+		status: bool 		# 是否成功执行
+		msg: string 		# 错误信息
+		
+# Excel素拓多活动导入
+@path: POST /thinphp/index.php/Home/Student/importExcelMulti
+	@params:
+		!file: file 			# excel文件，后缀为xls,或者xlsx
+		#注意此处文件的name属性为file，而非文件名为file
+	@response:
+		status: bool 		# 是否成功执行
+		msg: string 		# 错误信息
+
+
+# ******* 登录相关 ********
+# 验证码
+@path: GET	/thinkphp/index.php/Home/User/createValidateCode
+	@param:
+		none
+	@response:
+		file: image 	#验证码图片
+
+# 登录
+# 验证密码登录说明：
+# 重新登录：status=0;
+# 填写验证码：status=1;
+# 验证码错误：status=2;
+# 请输入用户名或密码：status=3;
+# 用户名或密码不正确：$status=4;
+# 登陆成功：$status=5
+@path: POST  /thinkphp/index.php/Home/User/Login
+	@param:
+		username: 	string 		#用户名
+		password: 	string 		#密码
+		validate: 	string		#验证码
+	@response:
+		status: bool 			# 是否成功
+		msg: string 			# 错误信息
+
+# 退出登录（跳转到登录页面）
+@path：GET /thinkphp/index.php/Home/User/logout
+	@param:
+		none
+	@response:
+		none
+
+# 前端每个页面都进行验证的操作
+# 没有登录：status=0 提示信息并跳转页面 
+# 登录成功：status=1 继续处理数据
+@path: all
+	@param:
+		none
+	@response:
+		status: bool 			# 是否成功
+		msg: string 			# 错误信息
+
+# 密码验证（重要删除操作进行密码确认）
+# 重新登录：status=-1；密码错误：status=0；密码正确：status=1
+@path: POST /thinkphp/index.php/Home/User/confirmPsw
+	@param:
+		password: string 	#密码
+	@response:
+		islogin: bool 			# 是否成功
+		msg: string 			# 错误信息

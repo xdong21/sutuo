@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>素拓平台-学号绑定</title>
+	<link rel="stylesheet" href="/actyprj/thinkphp/Public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/actyprj/thinkphp/Public/css/common.css" />
+</head>
+<body>
+	<div class="container top-offset">
+			<div class="row">
+				<!-- 素拓票信息 -->
+				<div class="col-xs-12 top-offset">
+					<span class="squre"></span>
+					<span class="space"></span>
+					<li class="text-blue font-size-18">您当前绑定的学号为：{$show.currentId}
+						<ul class="text-black top-offset font-size-16">
+							请输入您需要绑定或修改的学号
+							<input type="text" id="stuId">
+						</ul>
+					</li>
+				</div>
+				
+				
+				<div class="col-xs-10 col-xs-offset-1 top-offset">
+				<!-- 图片 -->
+					<img class="img-responsive" src="/actyprj/thinkphp/Public/images/confirm_01.png" />
+					<button id="confirmed_btn" type="button" class="btn btn-success confirm-width top-offset">确认</button>
+				</div>		
+
+				<div  id="openId" style="display:none" >{$show.openId}</div>
+			</div>
+		</div>
+		
+		<script src="/actyprj/thinkphp/Public/js/jquery.min.js"></script>
+		<script src="/actyprj/thinkphp/Public/js/bootstrap.min.js"></script>
+		<script>
+			$("#confirmed_btn").click(function() {
+				$.ajax({
+					url: '/actyprj/thinkphp/index.php/Home/SutuoTicket/bound',
+					type: 'POST',
+					contentType: "application/json",
+					data: JSON.stringify({
+						'studentId': $("input#stuId").val(),
+						'openId': $("#openId").text()
+					}),
+					dataType: "json",
+					success: function(returnData) {
+						console.log(returnData);
+						if (returnData.status)
+							window.location.href = "/sutuo-WeChat/bound.html";
+						else window.location.href = "/sutuo-WeChat/boundwrong.html";
+					},
+					error: function(returnData) {
+						console.log("error");
+						console.log(returnData);
+						window.location.href = "/sutuo-WeChat/boundwrong.html";
+					}
+				});
+			});
+		</script>
+</body>
+</html>

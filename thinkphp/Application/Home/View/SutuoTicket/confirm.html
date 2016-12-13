@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- maximum-scale=1.0 与 user-scalable=no 一起使用,禁用缩放功能 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>素拓加分</title>
+		
+		<link rel="stylesheet" href="/actyprj/thinkphp/Public/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/actyprj/thinkphp/Public/css/common.css" />
+		
+		<!--<include file="/thinkphp/Public/test" />-->
+		
+	</head>
+	<body>
+		
+		<div class="container top-offset">
+			<div class="row">
+				<!-- 素拓票信息 -->
+				<div class="col-xs-12 top-offset">
+					<span class="squre"></span>
+					<span class="space"></span>
+					<li class="text-blue font-size-18">素拓票信息
+						<ul class="text-black top-offset font-size-16">
+							<li>活动：<span id="activity">{$show.activityName}</span></li>
+							<li>类型：<span id="activity_type">{$show.sutuoType}</span></li>
+							<li>分值：<span id="score">{$show.score}</span>(<span id="score_type">{$show.sutuoName}</span>)</li>
+						</ul>
+					</li>
+				</div>
+				
+				<!-- 分数即将录入至 -->
+				<div class="col-xs-12 top-offset">
+					<span class="circle"></span>
+					<li class="text-oringe font-size-18">素拓票信息
+						<ul class="text-black top-offset font-size-16">
+							<li>年级：<span id="grade">{$show.year}级</span></li>
+							<li>班级：<span id="className">{$show.class}</span></li>
+							<li>姓名：<span id="studentName">{$show.studentName}</span></li>
+						</ul>
+					</li>
+				</div>
+				
+				<div class="col-xs-10 col-xs-offset-1 top-offset">
+				<!-- 图片 -->
+					<img class="img-responsive" src="/actyprj/thinkphp/Public/images/confirm_01.png" />
+					<button id="confirm_btn" type="button" class="btn btn-success confirm-width top-offset">确认录入</button>
+					<p class="text-center top-offset font-size-16"><a href="" class="text-black"><u>学生信息错误？点此更改</u></a></p>
+				</div>
+				
+				<div  id="templateId" style="display:none" >{$show.templateId}</div>
+				<div  id="studentId" style="display:none" >{$show.studentId}</div>
+				<div  id="secret" style="display:none" >{$show.secret}</div>
+
+				
+			</div>
+		</div>
+		
+		<script src="/actyprj/thinkphp/Public/js/jquery.min.js"></script>
+		<script src="/actyprj/thinkphp/Public/js/bootstrap.min.js"></script>
+		<script src="/actyprj/thinkphp/Public/js/common.js"></script>
+<!--	<script src="/thinkphp/Public/js/data.js" ></script>  -->
+		<script>
+			$("#confirm_btn").click(function() {
+				$.ajax({
+					url: '/actyprj/thinkphp/index.php/Home/SutuoTicket/addSutuo',
+					type: 'POST',
+					contentType: "application/json",
+					data: JSON.stringify({
+						'templateId': $("#templateId").text(),
+						'studentId': $("#studentId").text(),
+						'secret': $("#secret").text(),
+					}),
+					dataType: "json",
+					success: function(returnData) {
+						console.log(returnData);
+						if (returnData.status)
+							window.location.href = "/sutuo-WeChat/enter.php?studentId="+returnData.studentId+"&score="+returnData.score;
+						else window.location.href = "/sutuo-WeChat/wrong.html";
+					},
+					error: function(returnData) {
+						console.log("error");
+						console.log(returnData);
+						window.location.href = "/sutuo-WeChat/wrong.html";
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
